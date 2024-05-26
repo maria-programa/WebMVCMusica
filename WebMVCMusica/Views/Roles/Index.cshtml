@@ -4,17 +4,19 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>Puesto</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create"><img src="~/img/anadir.png" height="30px" width="30px" /></a>
 </p>
-<div class="container">
-    <input class="form-control" id="myInput" type="text" placeholder="Search..">
+<div class="container mb-3">
+    <div class="row col-lg-3">
+        <input class="form-control" id="myInput" type="text" placeholder="Buscar...">
+    </div>
 </div>
 <table class="table" id="myTable">
     <thead>
-        <tr>
+        <tr class="table-info">
             <th>
                 @Html.DisplayNameFor(model => model.Descripcion)
             </th>
@@ -22,17 +24,18 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Descripcion)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Descripcion)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id"><img src="~/img/editar.png" height="20px" width="20px" /></a> |
+                    <a asp-action="Details" asp-route-id="@item.Id"><img src="~/img/avance.png" height="20px" width="20px" /></a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id"><img src="~/img/borrar.png" height="20px" width="20px" /></a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

@@ -18,11 +18,19 @@ html {
 }
 
 body {
-  margin-bottom: 60px;
+    margin-bottom: 60px;
+    background-image: url('../img/2-13-1024x1024-removebg-preview.png');
+    background-position: bottom;
+    background-repeat: no-repeat;
+    background-size: auto;
 }
-/*table, th, td {
-    border: 1px solid black;
-}*/
+
+nav {
+    background-color : lightblue;
+}
+table {
+    background-color: #ffffffba;
+}
 
 th {
     cursor: pointer;
