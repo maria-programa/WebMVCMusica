@@ -24,6 +24,16 @@ namespace WebMVCMusica.Controllers
             var grupoBContext = _context.Canciones.Include(c => c.Albumes);
             return View(await grupoBContext.ToListAsync());
         }
+        public async Task<IActionResult> IndexC()
+        {
+            var grupoBContext = _context.Canciones.Include(c => c.Albumes);
+            var consulta = 
+                from canciones in _context.Canciones
+                where canciones.Titulo.ToUpper().StartsWith("S")
+                select canciones;
+
+            return View(await consulta.ToListAsync());
+        }
 
         // GET: Canciones/Details/5
         public async Task<IActionResult> Details(int? id)

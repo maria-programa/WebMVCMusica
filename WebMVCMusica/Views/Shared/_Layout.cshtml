@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -19,44 +19,37 @@
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Albumes" asp-action="Index">Albumes</a>
+                        
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Música</a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item text-dark" asp-area="" asp-controller="Grupos" asp-action="Index">Grupos</a></li>
+                                <li><a class="dropdown-item text-dark" asp-area="" asp-controller="Artistas" asp-action="Index">Artistas</a></li>
+                                <li><a class="dropdown-item text-dark" asp-area="" asp-controller="Albumes" asp-action="Index">Albumes</a></li>
+                                <li><a class="dropdown-item text-dark" asp-area="" asp-controller="Canciones" asp-action="Index">Canciones</a></li>
+                                <li><a class="dropdown-item text-dark" asp-area="" asp-controller="VideoClips" asp-action="Index">VideoClips</a></li>
+                                <li><a class="dropdown-item text-dark" asp-area="" asp-controller="Generos" asp-action="Index">Generos</a></li>
+                                <li><a class="dropdown-item text-dark" asp-area="" asp-controller="Funciones" asp-action="Index">Funciones</a></li>
+                                <li><a class="dropdown-item text-dark" asp-area="" asp-controller="Representantes" asp-action="Index">Representantes</a></li>
+                            </ul>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Grupos" asp-action="Index">Grupos</a>
+                        
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Giras</a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item text-dark" asp-area="" asp-controller="Giras" asp-action="Index">Giras</a></li>
+                                <li><a class="dropdown-item text-dark" asp-area="" asp-controller="Conciertos" asp-action="Index">Conciertos</a></li>
+                                <li><a class="dropdown-item text-dark" asp-area="" asp-controller="Paises" asp-action="Index">Paises</a></li>
+                                <li><a class="dropdown-item text-dark" asp-area="" asp-controller="Ciudades" asp-action="Index">Ciudades</a></li>
+                            </ul>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Artistas" asp-action="Index">Artistas</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Canciones" asp-action="Index">Canciones</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Conciertos" asp-action="Index">Conciertos</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Giras" asp-action="Index">Giras</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Generos" asp-action="Index">Generos</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Funciones" asp-action="Index">Funciones</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Paises" asp-action="Index">Paises</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Ciudades" asp-action="Index">Ciudades</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="VideoClips" asp-action="Index">VideoClips</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Plataformas" asp-action="Index">Plataformas</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Representantes" asp-action="Index">Representantes</a>
+                        
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Streaming</a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item text-dark" asp-area="" asp-controller="VideoClips" asp-action="Index">VideoClips</a></li>
+                                <li><a class="dropdown-item text-dark" asp-area="" asp-controller="Plataformas" asp-action="Index">Plataformas</a></li>
+                            </ul>
                         </li>
                     </ul>
                 </div>

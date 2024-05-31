@@ -1,6 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.Elfie.Model;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace WebMVCMusica.Models
 {
@@ -14,7 +16,7 @@ namespace WebMVCMusica.Models
         [Required(ErrorMessage = "Es necesario el titulo")]
         public string? Titulo { get; set; }
 
-        [DataType(DataType.Duration)]
+        [DataType(DataType.Time)]
         public TimeOnly? Duracion { get; set; }
 
         [DisplayName("Album")]
