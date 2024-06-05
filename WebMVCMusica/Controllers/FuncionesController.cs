@@ -6,22 +6,23 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using WebMVCMusica.Models;
+using WebMVCMusica.Services.Repositorio;
 
 namespace WebMVCMusica.Controllers
 {
     public class FuncionesController : Controller
     {
-        private readonly GrupoBContext _context;
+        private readonly IFuncionesRepositorio _repositorio;
 
-        public FuncionesController(GrupoBContext context)
+        public FuncionesController(IFuncionesRepositorio repositorio)
         {
-            _context = context;
+            _repositorio = repositorio;
         }
 
         // GET: Funciones
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Funciones.ToListAsync());
+            return View(_repositorio.DameFunciones().ToList());
         }
 
         // GET: Funciones/Details/5
@@ -32,8 +33,7 @@ namespace WebMVCMusica.Controllers
                 return NotFound();
             }
 
-            var funciones = await _context.Funciones
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var funciones = _repositorio.DameUnaFuncion((int)id);
             if (funciones == null)
             {
                 return NotFound();
@@ -57,8 +57,7 @@ namespace WebMVCMusica.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(funciones);
-                await _context.SaveChangesAsync();
+                _repositorio.AgregarFuncion(funciones);
                 return RedirectToAction(nameof(Index));
             }
             return View(funciones);
@@ -72,7 +71,7 @@ namespace WebMVCMusica.Controllers
                 return NotFound();
             }
 
-            var funciones = await _context.Funciones.FindAsync(id);
+            var funciones = _repositorio.DameUnaFuncion((int)id);
             if (funciones == null)
             {
                 return NotFound();
@@ -96,8 +95,7 @@ namespace WebMVCMusica.Controllers
             {
                 try
                 {
-                    _context.Update(funciones);
-                    await _context.SaveChangesAsync();
+                    _repositorio.ModificarFuncion(funciones.Id,funciones);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -123,8 +121,7 @@ namespace WebMVCMusica.Controllers
                 return NotFound();
             }
 
-            var funciones = await _context.Funciones
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var funciones = _repositorio.DameUnaFuncion((int)id);
             if (funciones == null)
             {
                 return NotFound();
@@ -138,19 +135,17 @@ namespace WebMVCMusica.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var funciones = await _context.Funciones.FindAsync(id);
-            if (funciones != null)
-            {
-                _context.Funciones.Remove(funciones);
-            }
-
-            await _context.SaveChangesAsync();
+            _repositorio.BorrarFuncion((int)id);
             return RedirectToAction(nameof(Index));
         }
 
         private bool FuncionesExists(int id)
         {
-            return _context.Funciones.Any(e => e.Id == id);
+            if (_repositorio.DameUnaFuncion((int)id) == null)
+            {
+                return false;
+            }
+            return true;
         }
     }
 }
