@@ -6,16 +6,20 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using WebMVCMusica.Models;
+using WebMVCMusica.ViewModels;
+using Giras = WebMVCMusica.Models.Giras;
 
 namespace WebMVCMusica.Controllers
 {
     public class GirasController : Controller
     {
         private readonly GrupoBContext _context;
+        private readonly ICreaListaPorGira _builderGira;
 
-        public GirasController(GrupoBContext context)
+        public GirasController(GrupoBContext context, ICreaListaPorGira builderGira)
         {
             _context = context;
+            _builderGira = builderGira;
         }
 
         // GET: Giras
@@ -23,6 +27,11 @@ namespace WebMVCMusica.Controllers
         {
             var grupoBContext = _context.Giras.Include(g => g.Grupos);
             return View(await grupoBContext.ToListAsync());
+        }
+
+        public async Task<IActionResult> GiraSin()
+        {
+            return View(this._builderGira.dameTodasGiras());
         }
 
         // GET: Giras/Details/5

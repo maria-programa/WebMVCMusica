@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using WebMVCMusica.Models;
+using WebMVCMusica.ViewModels;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,6 +8,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<GrupoBContext>(
        options => options.UseSqlServer("server=musicagrupos.database.windows.net;database=GrupoB;user=as;password=P0t@t0P0t@t0"));
+builder.Services.AddScoped<IGiraSinConciertoBuilder, Gira01>();
+builder.Services.AddScoped<ICreaListaPorGira, CreaListaPorGira>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
