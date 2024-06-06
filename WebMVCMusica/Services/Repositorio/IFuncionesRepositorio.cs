@@ -8,6 +8,6 @@ namespace WebMVCMusica.Services.Repositorio
         Funciones? DameUnaFuncion(int Id);
         bool BorrarFuncion(int Id);
         bool AgregarFuncion(Funciones funcion);
-        void ModificarFuncion(int Id, Funciones funcion);
+        void ModificarFuncion(Funciones funcion);
     }
 }

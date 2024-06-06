@@ -44,15 +44,17 @@ namespace WebMVCMusica.Services.Repositorio
             }
         }
 
-        public void ModificarFuncion(int Id, Funciones funcion)
+        public void ModificarFuncion(Funciones funcion)
         {
-            var recupera = DameUnaFuncion(Id);
-            if (recupera != null)
-            {
-                BorrarFuncion(Id);
-            }
+            _context.Update(funcion);
+            _context.SaveChanges();
+            //var recupera = DameUnaFuncion(Id);
+            //if (recupera != null)
+            //{
+            //    BorrarFuncion(Id);
+            //}
 
-            AgregarFuncion(funcion);
+            //AgregarFuncion(funcion);
         }
     }
 }

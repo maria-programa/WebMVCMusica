@@ -55,10 +55,11 @@ namespace WebMVCMusica.Services.Repositorio
             return true;
         }
 
-        public void ModificarFuncion(int Id, Funciones funcion)
+        public void ModificarFuncion(Funciones funcion)
         {
-            BorrarFuncion(Id);
-            AgregarFuncion(funcion);
+            
+            //BorrarFuncion(Id);
+            //AgregarFuncion(funcion);
         }
     }
 }

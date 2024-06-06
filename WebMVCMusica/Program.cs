@@ -11,7 +11,7 @@ builder.Services.AddDbContext<GrupoBContext>(
        options => options.UseSqlServer("server=musicagrupos.database.windows.net;database=GrupoB;user=as;password=P0t@t0P0t@t0"));
 builder.Services.AddScoped<IGiraSinConciertoBuilder, Gira01>();
 builder.Services.AddScoped<ICreaListaPorGira, CreaListaPorGira>();
-builder.Services.AddScoped<IFuncionesRepositorio, FakeFuncionesRepositorio>();
+builder.Services.AddScoped<IFuncionesRepositorio, EFFuncionesRepositorio>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

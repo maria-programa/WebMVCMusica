@@ -95,7 +95,7 @@ namespace WebMVCMusica.Controllers
             {
                 try
                 {
-                    _repositorio.ModificarFuncion(funciones.Id,funciones);
+                    _repositorio.ModificarFuncion(funciones);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
