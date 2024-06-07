@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using WebMVCMusica.Models;
-using WebMVCMusica.Services.Repositorio;
 using WebMVCMusica.ViewModels;
 using Giras = WebMVCMusica.Models.Giras;
 
@@ -14,22 +13,20 @@ namespace WebMVCMusica.Controllers
 {
     public class GirasController : Controller
     {
-        private readonly IGenericRepositorio<Giras> _repositorio;
-        private readonly IGenericRepositorio<Grupos> _repositorioGrupos;
+        private readonly GrupoBContext _context;
         private readonly ICreaListaPorGira _builderGira;
 
-        public GirasController(IGenericRepositorio<Giras> repositorio, IGenericRepositorio<Grupos> repositorioGrupos, ICreaListaPorGira builderGira)
+        public GirasController(GrupoBContext context, ICreaListaPorGira builderGira)
         {
-            _repositorio = repositorio;
-            _repositorioGrupos = repositorioGrupos;
+            _context = context;
             _builderGira = builderGira;
         }
 
         // GET: Giras
         public async Task<IActionResult> Index()
         {
-            //var grupoBContext = _context.Giras.Include(g => g.Grupos);
-            return View(_repositorio.DameTodos());
+            var grupoBContext = _context.Giras.Include(g => g.Grupos);
+            return View(await grupoBContext.ToListAsync());
         }
 
         public async Task<IActionResult> GiraSin()
@@ -45,10 +42,9 @@ namespace WebMVCMusica.Controllers
                 return NotFound();
             }
 
-            //var giras = await _context.Giras
-            //    .Include(g => g.Grupos)
-            //    .FirstOrDefaultAsync(m => m.Id == id);
-            var giras = _repositorio.DameUnElemento((int)id);
+            var giras = await _context.Giras
+                .Include(g => g.Grupos)
+                .FirstOrDefaultAsync(m => m.Id == id);
             if (giras == null)
             {
                 return NotFound();
@@ -60,7 +56,7 @@ namespace WebMVCMusica.Controllers
         // GET: Giras/Create
         public IActionResult Create()
         {
-            ViewData["GruposId"] = new SelectList(_repositorioGrupos.DameTodos(), "Id", "Nombre");
+            ViewData["GruposId"] = new SelectList(_context.Grupos, "Id", "Nombre");
             return View();
         }
 
@@ -73,10 +69,11 @@ namespace WebMVCMusica.Controllers
         {
             if (ModelState.IsValid)
             {
-                _repositorio.Agregar(giras);
+                _context.Add(giras);
+                await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["GruposId"] = new SelectList(_repositorioGrupos.DameTodos(), "Id", "Nombre", giras.GruposId);
+            ViewData["GruposId"] = new SelectList(_context.Grupos, "Id", "Nombre", giras.GruposId);
             return View(giras);
         }
 
@@ -88,12 +85,12 @@ namespace WebMVCMusica.Controllers
                 return NotFound();
             }
 
-            var giras = _repositorio.DameUnElemento((int)id);
+            var giras = await _context.Giras.FindAsync(id);
             if (giras == null)
             {
                 return NotFound();
             }
-            ViewData["GruposId"] = new SelectList(_repositorioGrupos.DameTodos(), "Id", "Nombre", giras.GruposId);
+            ViewData["GruposId"] = new SelectList(_context.Grupos, "Id", "Nombre", giras.GruposId);
             return View(giras);
         }
 
@@ -113,7 +110,8 @@ namespace WebMVCMusica.Controllers
             {
                 try
                 {
-                    _repositorio.Editar(giras);
+                    _context.Update(giras);
+                    await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -128,7 +126,7 @@ namespace WebMVCMusica.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["GruposId"] = new SelectList(_repositorioGrupos.DameTodos(), "Id", "Nombre", giras.GruposId);
+            ViewData["GruposId"] = new SelectList(_context.Grupos, "Id", "Nombre", giras.GruposId);
             return View(giras);
         }
 
@@ -140,10 +138,9 @@ namespace WebMVCMusica.Controllers
                 return NotFound();
             }
 
-            //var giras = await _context.Giras
-            //    .Include(g => g.Grupos)
-            //    .FirstOrDefaultAsync(m => m.Id == id);
-            var giras = _repositorio.DameUnElemento((int)id);
+            var giras = await _context.Giras
+                .Include(g => g.Grupos)
+                .FirstOrDefaultAsync(m => m.Id == id);
             if (giras == null)
             {
                 return NotFound();
@@ -157,17 +154,19 @@ namespace WebMVCMusica.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            _repositorio.Eliminar((int)id);
+            var giras = await _context.Giras.FindAsync(id);
+            if (giras != null)
+            {
+                _context.Giras.Remove(giras);
+            }
+
+            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool GirasExists(int id)
         {
-            if (_repositorio.DameUnElemento((int)id) == null)
-            {
-                return false;
-            }
-            return true;
+            return _context.Giras.Any(e => e.Id == id);
         }
     }
 }

@@ -12,9 +12,9 @@ namespace WebMVCMusica.Controllers
 {
     public class FuncionesController : Controller
     {
-        private readonly IGenericRepositorio<Funciones> _repositorio;
+        private readonly IFuncionesRepositorio _repositorio;
 
-        public FuncionesController(IGenericRepositorio<Funciones> repositorio)
+        public FuncionesController(IFuncionesRepositorio repositorio)
         {
             _repositorio = repositorio;
         }
@@ -22,7 +22,7 @@ namespace WebMVCMusica.Controllers
         // GET: Funciones
         public async Task<IActionResult> Index()
         {
-            return View(_repositorio.DameTodos());
+            return View(_repositorio.DameFunciones().ToList());
         }
 
         // GET: Funciones/Details/5
@@ -33,7 +33,7 @@ namespace WebMVCMusica.Controllers
                 return NotFound();
             }
 
-            var funciones = _repositorio.DameUnElemento((int)id);
+            var funciones = _repositorio.DameUnaFuncion((int)id);
             if (funciones == null)
             {
                 return NotFound();
@@ -57,7 +57,7 @@ namespace WebMVCMusica.Controllers
         {
             if (ModelState.IsValid)
             {
-                _repositorio.Agregar(funciones);
+                _repositorio.AgregarFuncion(funciones);
                 return RedirectToAction(nameof(Index));
             }
             return View(funciones);
@@ -71,7 +71,7 @@ namespace WebMVCMusica.Controllers
                 return NotFound();
             }
 
-            var funciones = _repositorio.DameUnElemento((int)id);
+            var funciones = _repositorio.DameUnaFuncion((int)id);
             if (funciones == null)
             {
                 return NotFound();
@@ -95,7 +95,7 @@ namespace WebMVCMusica.Controllers
             {
                 try
                 {
-                    _repositorio.Editar(funciones);
+                    _repositorio.ModificarFuncion(funciones);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -121,7 +121,7 @@ namespace WebMVCMusica.Controllers
                 return NotFound();
             }
 
-            var funciones = _repositorio.DameUnElemento((int)id);
+            var funciones = _repositorio.DameUnaFuncion((int)id);
             if (funciones == null)
             {
                 return NotFound();
@@ -135,13 +135,13 @@ namespace WebMVCMusica.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            _repositorio.Eliminar((int)id);
+            _repositorio.BorrarFuncion((int)id);
             return RedirectToAction(nameof(Index));
         }
 
         private bool FuncionesExists(int id)
         {
-            if (_repositorio.DameUnElemento((int)id) == null)
+            if (_repositorio.DameUnaFuncion((int)id) == null)
             {
                 return false;
             }

@@ -6,23 +6,22 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using WebMVCMusica.Models;
-using WebMVCMusica.Services.Repositorio;
 
 namespace WebMVCMusica.Controllers
 {
     public class GenerosController : Controller
     {
-        private readonly IGenericRepositorio<Generos> _repositorio;
+        private readonly GrupoBContext _context;
 
-        public GenerosController(IGenericRepositorio<Generos> repositorio)
+        public GenerosController(GrupoBContext context)
         {
-            _repositorio = repositorio;
+            _context = context;
         }
 
         // GET: Generos
         public async Task<IActionResult> Index()
         {
-            return View(_repositorio.DameTodos());
+            return View(await _context.Generos.ToListAsync());
         }
 
         // GET: Generos/Details/5
@@ -33,7 +32,8 @@ namespace WebMVCMusica.Controllers
                 return NotFound();
             }
 
-            var generos = _repositorio.DameUnElemento((int)id);
+            var generos = await _context.Generos
+                .FirstOrDefaultAsync(m => m.Id == id);
             if (generos == null)
             {
                 return NotFound();
@@ -57,7 +57,8 @@ namespace WebMVCMusica.Controllers
         {
             if (ModelState.IsValid)
             {
-                _repositorio.Agregar(generos);
+                _context.Add(generos);
+                await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(generos);
@@ -71,7 +72,7 @@ namespace WebMVCMusica.Controllers
                 return NotFound();
             }
 
-            var generos = _repositorio.DameUnElemento((int) id);
+            var generos = await _context.Generos.FindAsync(id);
             if (generos == null)
             {
                 return NotFound();
@@ -95,7 +96,8 @@ namespace WebMVCMusica.Controllers
             {
                 try
                 {
-                    _repositorio.Editar(generos);
+                    _context.Update(generos);
+                    await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -121,7 +123,8 @@ namespace WebMVCMusica.Controllers
                 return NotFound();
             }
 
-            var generos = _repositorio.DameUnElemento((int)id);
+            var generos = await _context.Generos
+                .FirstOrDefaultAsync(m => m.Id == id);
             if (generos == null)
             {
                 return NotFound();
@@ -135,17 +138,19 @@ namespace WebMVCMusica.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            _repositorio.Eliminar((int)id);
+            var generos = await _context.Generos.FindAsync(id);
+            if (generos != null)
+            {
+                _context.Generos.Remove(generos);
+            }
+
+            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool GenerosExists(int id)
         {
-            if (_repositorio.DameUnElemento((int)id) == null)
-            {
-                return false;
-            }
-            return true;
+            return _context.Generos.Any(e => e.Id == id);
         }
     }
 }

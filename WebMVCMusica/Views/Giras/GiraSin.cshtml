@@ -8,24 +8,24 @@
 
 <table class="table" id="myTable">
     <thead>
-        <tr class="table-info">
-            <th>
-                Gira
-            </th>
-            <th>
-                Conciertos
-            </th>
-            <th></th>
-        </tr>
-        <tr class="table-info">
-            <th></th>
-            <th>
-                Ciudades
-            </th>
-            <th>
-                Fecha
-            </th>
-        </tr>
+    <tr class="table-info">
+        <th>
+            Gira
+        </th>
+        <th>
+            Conciertos
+        </th>
+        <th></th>
+    </tr>
+    <tr class ="table-info">
+        <th></th>
+        <th>
+            Ciudades
+        </th>
+        <th>
+            Fecha
+        </th>
+    </tr>
     </thead>
     <tbody>
         @foreach (var item in Model)
@@ -37,18 +37,18 @@
                 <td>
                     @foreach (var hijo in item.conciertos)
                     {
-
+                       
                         @Html.DisplayFor(modelItem => hijo.Ciudad)
                         <br />
                     }
                 </td>
                 <td>
-                    @foreach (var hijo in item.conciertos)
-                    {
-
-                        @Html.DisplayFor(modelItem => hijo.Fecha)
-                        <br />
-                    }
+                @foreach (var hijo in item.conciertos)
+                {
+                        
+                    @Html.DisplayFor(modelItem => hijo.Fecha)
+                    <br />
+                }
                 </td>
             </tr>
         }
