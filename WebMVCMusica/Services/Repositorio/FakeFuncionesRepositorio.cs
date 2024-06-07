@@ -1,8 +1,10 @@
-﻿using WebMVCMusica.Models;
+﻿using System.Linq.Expressions;
+using WebMVCMusica.Models;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace WebMVCMusica.Services.Repositorio
 {
-    public class FakeFuncionesRepositorio : IFuncionesRepositorio
+    public class FakeFuncionesRepositorio : IGenericRepositorio<Funciones>
     {
         private List<Funciones> listaFunciones = new();
 
@@ -34,32 +36,35 @@ namespace WebMVCMusica.Services.Repositorio
             listaFunciones.Add(miFuncion);
         }
 
-        public List<Funciones> DameFunciones()
+        public List<Funciones> DameTodos()
         {
             return this.listaFunciones;
         }
 
-        public Funciones? DameUnaFuncion(int Id)
+        public Funciones DameUnElemento(int Id)
         {
-            return this.listaFunciones.Find(x => x.Id==Id);
+            return this.listaFunciones.Find(x => x.Id == Id);
         }
 
-        public bool BorrarFuncion(int Id)
+        public bool Eliminar(int Id)
         {
-            return listaFunciones.Remove(DameUnaFuncion(Id));
+            return listaFunciones.Remove(DameUnElemento(Id));
         }
 
-        public bool AgregarFuncion(Funciones funcion)
+        public bool Agregar(Funciones element)
         {
-            this.listaFunciones.Add(funcion);
+            this.listaFunciones.Add(element);
             return true;
         }
 
-        public void ModificarFuncion(Funciones funcion)
+        public void Editar(Funciones element)
         {
-            
-            //BorrarFuncion(Id);
-            //AgregarFuncion(funcion);
+            throw new NotImplementedException();
+        }
+
+        public List<Funciones> Filtra(Expression<Func<Funciones, bool>> predicado)
+        {
+            throw new NotImplementedException();
         }
     }
 }
