@@ -6,34 +6,37 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using WebMVCMusica.Models;
+using WebMVCMusica.Services.Repositorio;
 
 namespace WebMVCMusica.Controllers
 {
     public class CancionesController : Controller
     {
-        private readonly GrupoBContext _context;
+        private readonly IGenericRepositorio<Canciones> _repositorio;
+        private readonly IGenericRepositorio<Albumes> _repositorioAlbumes;
 
-        public CancionesController(GrupoBContext context)
+        public CancionesController(IGenericRepositorio<Canciones> repositorio, IGenericRepositorio<Albumes> repositorioAlbumes)
         {
-            _context = context;
+            _repositorio = repositorio;
+            _repositorioAlbumes = repositorioAlbumes;
         }
 
         // GET: Canciones
         public async Task<IActionResult> Index()
         {
-            var grupoBContext = _context.Canciones.Include(c => c.Albumes);
-            return View(await grupoBContext.ToListAsync());
+            //var grupoBContext = _context.Canciones.Include(c => c.Albumes);
+            return View(_repositorio.DameTodos());
         }
-        public async Task<IActionResult> IndexC()
-        {
-            var grupoBContext = _context.Canciones.Include(c => c.Albumes);
-            var consulta = 
-                from canciones in _context.Canciones
-                where canciones.Titulo.ToUpper().StartsWith("S")
-                select canciones;
+        //public async Task<IActionResult> IndexC()
+        //{
+        //    //var grupoBContext = _context.Canciones.Include(c => c.Albumes);
+        //    var consulta = 
+        //        from canciones in _context.Canciones
+        //        where canciones.Titulo.ToUpper().StartsWith("S")
+        //        select canciones;
 
-            return View(await consulta.ToListAsync());
-        }
+        //    return View(await consulta.ToListAsync());
+        //}
 
         // GET: Canciones/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -43,9 +46,11 @@ namespace WebMVCMusica.Controllers
                 return NotFound();
             }
 
-            var canciones = await _context.Canciones
-                .Include(c => c.Albumes)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            //var canciones = await _context.Canciones
+            //    .Include(c => c.Albumes)
+            //    .FirstOrDefaultAsync(m => m.Id == id);
+
+            var canciones = _repositorio.DameUnElemento((int)id);
             if (canciones == null)
             {
                 return NotFound();
@@ -57,7 +62,7 @@ namespace WebMVCMusica.Controllers
         // GET: Canciones/Create
         public IActionResult Create()
         {
-            ViewData["AlbumesId"] = new SelectList(_context.Albumes, "Id", "Nombre");
+            ViewData["AlbumesId"] = new SelectList(_repositorioAlbumes.DameTodos(), "Id", "Nombre");
             return View();
         }
 
@@ -70,11 +75,10 @@ namespace WebMVCMusica.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(canciones);
-                await _context.SaveChangesAsync();
+                _repositorio.Agregar(canciones);
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["AlbumesId"] = new SelectList(_context.Albumes, "Id", "Nombre", canciones.AlbumesId);
+            ViewData["AlbumesId"] = new SelectList(_repositorioAlbumes.DameTodos(), "Id", "Nombre", canciones.AlbumesId);
             return View(canciones);
         }
 
@@ -86,12 +90,12 @@ namespace WebMVCMusica.Controllers
                 return NotFound();
             }
 
-            var canciones = await _context.Canciones.FindAsync(id);
+            var canciones = _repositorio.DameUnElemento((int)id);
             if (canciones == null)
             {
                 return NotFound();
             }
-            ViewData["AlbumesId"] = new SelectList(_context.Albumes, "Id", "Nombre", canciones.AlbumesId);
+            ViewData["AlbumesId"] = new SelectList(_repositorioAlbumes.DameTodos(), "Id", "Nombre", canciones.AlbumesId);
             return View(canciones);
         }
 
@@ -111,8 +115,7 @@ namespace WebMVCMusica.Controllers
             {
                 try
                 {
-                    _context.Update(canciones);
-                    await _context.SaveChangesAsync();
+                    _repositorio.Editar(canciones);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -127,7 +130,7 @@ namespace WebMVCMusica.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["AlbumesId"] = new SelectList(_context.Albumes, "Id", "Nombre", canciones.AlbumesId);
+            ViewData["AlbumesId"] = new SelectList(_repositorioAlbumes.DameTodos(), "Id", "Nombre", canciones.AlbumesId);
             return View(canciones);
         }
 
@@ -139,9 +142,11 @@ namespace WebMVCMusica.Controllers
                 return NotFound();
             }
 
-            var canciones = await _context.Canciones
-                .Include(c => c.Albumes)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            //var canciones = await _context.Canciones
+            //    .Include(c => c.Albumes)
+            //    .FirstOrDefaultAsync(m => m.Id == id);
+
+            var canciones = _repositorio.DameUnElemento((int)id);
             if (canciones == null)
             {
                 return NotFound();
@@ -155,19 +160,17 @@ namespace WebMVCMusica.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var canciones = await _context.Canciones.FindAsync(id);
-            if (canciones != null)
-            {
-                _context.Canciones.Remove(canciones);
-            }
-
-            await _context.SaveChangesAsync();
+            _repositorio.Eliminar((int)id);
             return RedirectToAction(nameof(Index));
         }
 
         private bool CancionesExists(int id)
         {
-            return _context.Canciones.Any(e => e.Id == id);
+            if (_repositorio.DameUnElemento((int)id) == null)
+            {
+                return false;
+            }
+            return true;
         }
     }
 }

@@ -1,0 +1,44 @@
+﻿@model IEnumerable<WebMVCMusica.Models.VistaGiras>
+
+@{
+    ViewData["Title"] = "VistaPorGira";
+}
+
+<h1>VistaPorGira</h1>
+
+<table class="table" >
+    <thead>
+        <tr class="table-info">
+            <th>
+                @Html.DisplayNameFor(model => model.Nombre)
+            </th>
+            <th>
+                Fecha de inicio de la gira
+            </th>
+            <th>
+                Fecha de fin de la gira
+            </th>
+            <th>
+                Grupo
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Nombre)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FechaInicio)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FechaFin)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Expr1)
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

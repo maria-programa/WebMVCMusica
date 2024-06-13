@@ -14,6 +14,7 @@ namespace WebMVCMusica.Models
         [StringLength(200)]
         public string? Nombre { get; set; }
 
+        [DisplayName("Grupo")]
         public bool grupo { get; set; }
 
         [DataType(DataType.Date)]
