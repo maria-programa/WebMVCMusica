@@ -7,11 +7,12 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-builder.Services.AddDbContext<GrupoBContext>(
-       options => options.UseSqlServer("server=musicagrupos.database.windows.net;database=GrupoB;user=as;password=P0t@t0P0t@t0"));
+builder.Services.AddDbContext<GrupoBContext>();
+       //options => options.UseSqlServer("server=musicagrupos.database.windows.net;database=GrupoB;user=as;password=P0t@t0P0t@t0"));
 builder.Services.AddScoped<IGiraSinConciertoBuilder, Gira01>();
 builder.Services.AddScoped<ICreaListaPorGira, CreaListaPorGira>();
 builder.Services.AddScoped(typeof(IGenericRepositorio<>), typeof(EFGenericRepositorio<>));
+builder.Services.AddApplicationInsightsTelemetry();
 
 var app = builder.Build();
 
